@@ -769,6 +769,7 @@ function MetroLibrary:Window(Options)
                     Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                     Button.AutoButtonColor = false
                     Button.FontSize = Enum.FontSize.Size14
+                    Button.Text = Options.Name
                     Button.TextSize = 13
                     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
                     Button.Font = Enum.Font.Gotham
@@ -1336,6 +1337,7 @@ function MetroLibrary:Window(Options)
                         Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                         Button.AutoButtonColor = false
                         Button.FontSize = Enum.FontSize.Size14
+                        Button.Text = Options.Name
                         Button.TextSize = 13
                         Button.TextColor3 = Color3.fromRGB(255, 255, 255)
                         Button.Font = Enum.Font.Gotham
