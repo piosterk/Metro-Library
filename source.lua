@@ -1818,7 +1818,7 @@ function MetroLibrary:Window(Options)
                     Display.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                     Display.FontSize = Enum.FontSize.Size14
                     Display.TextSize = 14
-                    Display.Text = Options.DefaultPlayer.DisplayName
+                    Display.Text = "@" .. Options.DefaultPlayer.DisplayName
                     Display.TextColor3 = Color3.fromRGB(255, 255, 255)
                     Display.TextYAlignment = Enum.TextYAlignment.Top
                     Display.Font = Enum.Font.Gotham
@@ -1873,11 +1873,11 @@ function MetroLibrary:Window(Options)
 
                             if newPlayer then
                                 Userbox.Text = newPlayer.Name
-                                Display.Text = newPlayer.DisplayName
+                                Display.Text = "@" .. newPlayer.DisplayName
                                 PlayerfieldImage.Image = getHeadshot(newPlayer)
                             else
                                 Userbox.Text = LastUserText
-                                Display.Text = LastDisplayText
+                                Display.Text = "@" .. LastDisplayText
                             end
                         end
                     )
