@@ -28,7 +28,7 @@ function MetroLibrary:OnClick(GuiBase, Callback)
         GuiBase.Active = true
         GuiBase.InputBegan:Connect(
             function(Input, GameProcessed)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed then
+                if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed == true then
                     Callback()
                 end
             end
@@ -227,7 +227,7 @@ function MetroLibrary:Window(Options)
 
     Header.InputBegan:Connect(
         function(Input, GameProcessed)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed then
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed == true then
                 Main.AnchorPoint =
                     Vector2.new(
                     (MetroLibrary.Mouse.X - Main.AbsolutePosition.X) / Main.AbsoluteSize.X,
@@ -247,7 +247,7 @@ function MetroLibrary:Window(Options)
 
     Header.InputEnded:Connect(
         function(Input, GameProcessed)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed then
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed == true then
                 isDragging = false
             end
         end
@@ -943,10 +943,10 @@ function MetroLibrary:Window(Options)
 
                     Slider.InputBegan:Connect(
                         function(Input, GameProcessed)
-                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed then
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed == true then
                                 isDragging = true
                                 Slide()
-                            elseif Input.UserInputType == Enum.UserInputType.MouseButton3 and GameProcessed then
+                            elseif Input.UserInputType == Enum.UserInputType.MouseButton3 and GameProcessed == true then
                                 Value.Active = true
                                 Value.TextEditable = true
                                 Value:CaptureFocus()
@@ -1003,7 +1003,7 @@ function MetroLibrary:Window(Options)
 
                     Slider.InputEnded:Connect(
                         function(Input, GameProcessed)
-                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed then
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and GameProcessed == true then
                                 isDragging = false
                             end
                         end
