@@ -1749,7 +1749,7 @@ function MetroLibrary:Window(Options)
                     local Players = {}
 
                     for _, Player in pairs(game.Players:GetPlayers()) do
-                        if (#game.Players:GetPlayers() > 1 and Player ~= game.Players.LocalPlayer) or Player then
+                        if (#game.Players:GetPlayers() > 1 and Player ~= game.Players.LocalPlayer or Player) then
                             table.insert(Players, Player)
                         end
                     end
