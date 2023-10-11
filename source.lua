@@ -896,7 +896,7 @@ function MetroLibrary:Window(Options)
                     Value.FontSize = Enum.FontSize.Size14
                     Value.TextSize = 13
                     Value.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    Value.Text = Options.Default
+                    Value.Text = math.floor(Options.Default * 100) / 100
                     Value.TextEditable = false
                     Value.Font = Enum.Font.Gotham
                     Value.TextXAlignment = Enum.TextXAlignment.Right
@@ -958,7 +958,7 @@ function MetroLibrary:Window(Options)
 
                                         if tonumber(Value.Text) then
                                             Value.Text =
-                                                math.clamp(tonumber(Value.Text), Options.Minimum, Options.Maximum)
+                                                math.floor(math.clamp(tonumber(Value.Text), Options.Minimum, Options.Maximum) * 100) / 100
                                             MetroLibrary:Tween(
                                                 Inner,
                                                 0.1,
@@ -975,7 +975,7 @@ function MetroLibrary:Window(Options)
                                                 }
                                             )
                                         else
-                                            Value.Text = Options.Default
+                                            Value.Text = math.floor(Options.Default * 100) / 100
                                             MetroLibrary:Tween(
                                                 Inner,
                                                 0.1,
