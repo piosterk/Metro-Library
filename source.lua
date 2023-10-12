@@ -23,19 +23,6 @@ function MetroLibrary:Tweens(Array)
     return Tweens
 end
 
-function MetroLibrary:OnClick(GuiBase, Callback)
-    if GuiBase:IsA("GuiBase2d") then
-        GuiBase.Active = true
-        GuiBase.InputBegan:Connect(
-            function(Input, GameProcessed)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    Callback()
-                end
-            end
-        )
-    end
-end
-
 if shared.__Metro then
     shared.__Metro:Destroy()
     shared.__Metro = nil
@@ -410,61 +397,61 @@ function MetroLibrary:Window(Options)
     Shadow.SliceCenter = Rect.new(49, 49, 450, 450)
     Shadow.Parent = Main
 
-    MetroLibrary:OnClick(
-        TabDock,
-        function()
-            if TabDock_Image.ImageTransparency == 0.5 then
-                MetroLibrary:Tweens(
-                    {
+    TabDock.InputBegan:Connect(
+        function(Input)
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if TabDock_Image.ImageTransparency == 0.5 then
+                    MetroLibrary:Tweens(
                         {
-                            TabDock_Image,
-                            0.2,
-                            Enum.EasingStyle.Sine,
-                            Enum.EasingDirection.Out,
-                            {ImageTransparency = 0, ImageColor3 = Color3.fromRGB(85, 85, 255)}
-                        },
+                            {
+                                TabDock_Image,
+                                0.2,
+                                Enum.EasingStyle.Sine,
+                                Enum.EasingDirection.Out,
+                                {ImageTransparency = 0, ImageColor3 = Color3.fromRGB(85, 85, 255)}
+                            },
+                            {
+                                SidePanel,
+                                0.3,
+                                Enum.EasingStyle.Sine,
+                                Enum.EasingDirection.Out,
+                                {AnchorPoint = Vector2.new(0, 0)}
+                            },
+                            {Darker, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {BackgroundTransparency = 0.4}},
+                            {TabTextIndicator, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {TextTransparency = 0}}
+                        }
+                    )
+                elseif TabDock_Image.ImageTransparency == 0 then
+                    MetroLibrary:Tweens(
                         {
-                            SidePanel,
-                            0.3,
-                            Enum.EasingStyle.Sine,
-                            Enum.EasingDirection.Out,
-                            {AnchorPoint = Vector2.new(0, 0)}
-                        },
-                        {Darker, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {BackgroundTransparency = 0.4}},
-                        {TabTextIndicator, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {TextTransparency = 0}}
-                    }
-                )
-            elseif TabDock_Image.ImageTransparency == 0 then
-                MetroLibrary:Tweens(
-                    {
-                        {
-                            TabDock_Image,
-                            0.2,
-                            Enum.EasingStyle.Sine,
-                            Enum.EasingDirection.Out,
-                            {ImageTransparency = 0.5, ImageColor3 = Color3.fromRGB(255, 255, 255)}
-                        },
-                        {
-                            SidePanel,
-                            0.3,
-                            Enum.EasingStyle.Sine,
-                            Enum.EasingDirection.Out,
-                            {AnchorPoint = Vector2.new(1, 0)}
-                        },
-                        {Darker, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {BackgroundTransparency = 1}},
-                        {TabTextIndicator, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {TextTransparency = 1}}
-                    }
-                )
+                            {
+                                TabDock_Image,
+                                0.2,
+                                Enum.EasingStyle.Sine,
+                                Enum.EasingDirection.Out,
+                                {ImageTransparency = 0.5, ImageColor3 = Color3.fromRGB(255, 255, 255)}
+                            },
+                            {
+                                SidePanel,
+                                0.3,
+                                Enum.EasingStyle.Sine,
+                                Enum.EasingDirection.Out,
+                                {AnchorPoint = Vector2.new(1, 0)}
+                            },
+                            {Darker, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {BackgroundTransparency = 1}},
+                            {TabTextIndicator, 0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {TextTransparency = 1}}
+                        }
+                    )
+                end
             end
         end
     )
 
-    MetroLibrary:OnClick(
-        Exit,
-        function()
+    Exit.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
             Metro_GUI:Destroy()
         end
-    )
+    end)
 
     local WindowFunctions = {}
 
@@ -536,9 +523,8 @@ function MetroLibrary:Window(Options)
         TabButtonImage.ImageTransparency = 0.5
         TabButtonImage.Parent = TabButton
 
-        MetroLibrary:OnClick(
-            TabButton,
-            function()
+        TabButton.InputBegan:Connect(function(Input)
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
                 for _, Tabs in pairs(InnerPanel:GetChildren()) do
                     if Tabs:IsA("ScrollingFrame") and Tabs ~= Tab then
                         Tabs.Visible = false
@@ -587,7 +573,7 @@ function MetroLibrary:Window(Options)
                     end
                 end
             end
-        )
+        end)
 
         local TabFunctions = {}
 
@@ -793,13 +779,12 @@ function MetroLibrary:Window(Options)
                     ButtonPadding.PaddingRight = UDim.new(0, 10)
                     ButtonPadding.Parent = Button
 
-                    MetroLibrary:OnClick(
-                        Button,
-                        function()
+                    Button.InputBegan:Connect(function(Input)
+                        if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                             Options.Callback(Button.Name)
                             makeRipple(Button, Color3.fromRGB(255, 255, 255))
                         end
-                    )
+                    end)
                 end
 
                 function SubSectionFunctions:Slider(Options)
@@ -943,10 +928,10 @@ function MetroLibrary:Window(Options)
 
                     Slider.InputBegan:Connect(
                         function(Input, GameProcessed)
-                            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                                 isDragging = true
                                 Slide()
-                            elseif Input.UserInputType == Enum.UserInputType.MouseButton3 then
+                            elseif Input.UserInputType == Enum.UserInputType.MouseButton3 and Darker.BackgroundTransparency == 1 then
                                 Value.Active = true
                                 Value.TextEditable = true
                                 Value:CaptureFocus()
@@ -1003,7 +988,7 @@ function MetroLibrary:Window(Options)
 
                     Slider.InputEnded:Connect(
                         function(Input, GameProcessed)
-                            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                                 isDragging = false
                             end
                         end
@@ -1142,9 +1127,8 @@ function MetroLibrary:Window(Options)
                         )
                     end
 
-                    MetroLibrary:OnClick(
-                        Toggle,
-                        function()
+                    Toggle.InputBegan:Connect(function(Input)
+                        if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                             if Circle.AnchorPoint.X == 0 then
                                 Options.Callback(true)
                                 MetroLibrary:Tweens(
@@ -1187,7 +1171,7 @@ function MetroLibrary:Window(Options)
                                 )
                             end
                         end
-                    )
+                    end)
                 end
 
                 function SubSectionFunctions:Inputfield(Options)
@@ -1361,13 +1345,12 @@ function MetroLibrary:Window(Options)
                         ButtonPadding.PaddingRight = UDim.new(0, 10)
                         ButtonPadding.Parent = Button
 
-                        MetroLibrary:OnClick(
-                            Button,
-                            function()
+                        Button.InputBegan:Connect(function(Input)
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                                 Options.Callback(Button.Name)
                                 makeRipple(Button, Color3.fromRGB(255, 255, 255))
                             end
-                        )
+                        end)
 
                         for _, Buttones in pairs(HorizontalAlignment:GetChildren()) do
                             if Buttones:IsA("TextButton") then
@@ -1599,9 +1582,8 @@ function MetroLibrary:Window(Options)
                         end
                     )
 
-                    MetroLibrary:OnClick(
-                        Docker,
-                        function()
+                    Docker.InputBegan:Connect(function(Input)
+                        if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                             if DockerImage.Rotation == 0 then
                                 MetroLibrary:Tweens(
                                     {
@@ -1642,7 +1624,7 @@ function MetroLibrary:Window(Options)
                                 )
                             end
                         end
-                    )
+                    end)
 
                     for _, Item in pairs(Options.Items) do
                         local ItemButton = Instance.new("TextButton")
@@ -1693,9 +1675,8 @@ function MetroLibrary:Window(Options)
                             )
                         end
 
-                        MetroLibrary:OnClick(
-                            ItemButton,
-                            function()
+                        ItemButton.InputBegan:Connect(function(Input)
+                            if Input.UserInputType == Enum.UserInputType.MouseButton1 and Darker.BackgroundTransparency == 1 then
                                 Options.Callback(Item)
 
                                 for _, ItemButtons in pairs(Scroller:GetChildren()) do
@@ -1741,7 +1722,7 @@ function MetroLibrary:Window(Options)
                                     {BackgroundTransparency = 0.5}
                                 )
                             end
-                        )
+                        end)
                     end
                 end
 
