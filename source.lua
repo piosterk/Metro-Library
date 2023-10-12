@@ -1039,7 +1039,7 @@ function MetroLibrary:Window(Options)
                     Title.FontSize = Enum.FontSize.Size14
                     Title.TextSize = 13
                     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    Title.Text = "Toggle"
+                    Title.Text = Options.Name
                     Title.Font = Enum.Font.Gotham
                     Title.TextXAlignment = Enum.TextXAlignment.Left
                     Title.Parent = Toggle
@@ -1832,8 +1832,8 @@ function MetroLibrary:Window(Options)
 
                     Userbox.FocusLost:Connect(
                         function()
-                            local LastUserText = Userbox.Text
-                            local LastDisplayText = Display.Text
+                            local LastUserText = Userbox.Text:sub(2, #Userbox.Text)
+                            local LastDisplayText = Display.Text:sub(2, #Display.Text)
 
                             local Players = getPlayers()
 
