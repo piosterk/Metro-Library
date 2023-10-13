@@ -729,9 +729,9 @@ function MetroLibrary:Window(Options)
                     local TextfieldStroke = Instance.new("UIStroke")
                     TextfieldStroke.Name = "TextfieldStroke"
                     TextfieldStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    TextfieldStroke.Transparency = 0.85
+                    TextfieldStroke.Transparency = 0
                     TextfieldStroke.Thickness = 1.25
-                    TextfieldStroke.Color = Color3.fromRGB(255, 255, 255)
+                    TextfieldStroke.Color = Textfield.BackgroundColor3
                     TextfieldStroke.Parent = Textfield
 
                     local TextfieldCorner = Instance.new("UICorner")
@@ -743,6 +743,7 @@ function MetroLibrary:Window(Options)
                 function SubSectionFunctions:Button(Options)
                     local Options = Options or {}
                     Options.Name = Options.Name or "Button"
+                    Options.Color = Options.Color or Color3.fromRGB(50, 50, 50)
                     Options.Callback = Options.Callback or function()
                         end
 
@@ -752,7 +753,7 @@ function MetroLibrary:Window(Options)
                     Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
                     Button.BackgroundTransparency = 0.5
                     Button.BorderSizePixel = 0
-                    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                    Button.BackgroundColor3 = Options.Color
                     Button.AutoButtonColor = false
                     Button.FontSize = Enum.FontSize.Size14
                     Button.Text = Options.Name
@@ -769,9 +770,9 @@ function MetroLibrary:Window(Options)
                     local ButtonStroke = Instance.new("UIStroke")
                     ButtonStroke.Name = "ButtonStroke"
                     ButtonStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    ButtonStroke.Transparency = 0.85
+                    ButtonStroke.Transparency = 0
                     ButtonStroke.Thickness = 1.25
-                    ButtonStroke.Color = Color3.fromRGB(255, 255, 255)
+                    ButtonStroke.Color = Button.BackgroundColor3
                     ButtonStroke.Parent = Button
 
                     local ButtonPadding = Instance.new("UIPadding")
@@ -790,6 +791,7 @@ function MetroLibrary:Window(Options)
                 function SubSectionFunctions:Slider(Options)
                     local Options = Options or {}
                     Options.Name = Options.Name or "Slider"
+                    Options.Color = Options.Color or Color3.fromRGB(85, 85, 255)
                     Options.Minimum = Options.Minimum or 0
                     Options.Maximum = Options.Maximum or 100
                     Options.Default = Options.Default or 0
@@ -813,9 +815,9 @@ function MetroLibrary:Window(Options)
                     local SliderStroke = Instance.new("UIStroke")
                     SliderStroke.Name = "SliderStroke"
                     SliderStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    SliderStroke.Transparency = 0.85
+                    SliderStroke.Transparency = 0
                     SliderStroke.Thickness = 1.25
-                    SliderStroke.Color = Color3.fromRGB(255, 255, 255)
+                    SliderStroke.Color = Color3.fromRGB(50, 50, 50)
                     SliderStroke.Parent = Slider
 
                     local Title = Instance.new("TextLabel")
@@ -852,14 +854,14 @@ function MetroLibrary:Window(Options)
                     Inner.BorderColor3 = Color3.fromRGB(0, 0, 0)
                     Inner.BackgroundTransparency = 0.5
                     Inner.BorderSizePixel = 0
-                    Inner.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+                    Inner.BackgroundColor3 = Options.Color
                     Inner.Parent = Slider
 
                     local SliderInnerStroke = Instance.new("UIStroke")
                     SliderInnerStroke.Name = "SliderInnerStroke"
                     SliderInnerStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                     SliderInnerStroke.Thickness = 1.25
-                    SliderInnerStroke.Color = Color3.fromRGB(85, 85, 255)
+                    SliderInnerStroke.Color = Inner.BackgroundColor3
                     SliderInnerStroke.Parent = Inner
 
                     local SliderInnerCorner = Instance.new("UICorner")
@@ -887,7 +889,37 @@ function MetroLibrary:Window(Options)
                     Value.Font = Enum.Font.Gotham
                     Value.TextXAlignment = Enum.TextXAlignment.Right
                     Value.ClearTextOnFocus = false
+                    Value.Visible = false
                     Value.Parent = Slider
+
+                    local ValueText = Instance.new("TextLabel")
+                    ValueText.Active = false
+                    ValueText.Name = "ValueText"
+                    ValueText.ZIndex = 2
+                    ValueText.AnchorPoint = Vector2.new(1, 0.5)
+                    ValueText.AutomaticSize = Enum.AutomaticSize.X
+                    ValueText.Size = UDim2.new(0, 0, 1, 0)
+                    ValueText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+                    ValueText.BackgroundTransparency = 1
+                    ValueText.Position = UDim2.new(1, 0, 0.5, 0)
+                    ValueText.BorderSizePixel = 0
+                    ValueText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                    ValueText.FontSize = Enum.FontSize.Size14
+                    ValueText.TextSize = 13
+                    ValueText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    ValueText.Text = Value.Text
+                    ValueText.Font = Enum.Font.Gotham
+                    ValueText.TextXAlignment = Enum.TextXAlignment.Right
+                    ValueText.Parent = Slider
+
+                    Value:GetPropertyChangedSignal("Text"):Connect(function()
+                        ValueText.Text = Value.Text
+                    end)
+
+                    Value.Focused:Connect(function()
+                        ValueText.Visible = false
+                        Value.Visible = true
+                    end)
 
                     local SliderValuePadding = Instance.new("UIPadding")
                     SliderValuePadding.Name = "SliderValuePadding"
@@ -895,13 +927,11 @@ function MetroLibrary:Window(Options)
                     SliderValuePadding.PaddingRight = UDim.new(0, 10)
                     SliderValuePadding.Parent = Value
 
-                    Value.Focused:Connect(
-                        function()
-                            if Value.Active == false then
-                                Value:ReleaseFocus()
-                            end
-                        end
-                    )
+                    local SliderValueTextPadding = Instance.new("UIPadding")
+                    SliderValueTextPadding.Name = "SliderValueTextPadding"
+                    SliderValueTextPadding.PaddingLeft = UDim.new(0, 10)
+                    SliderValueTextPadding.PaddingRight = UDim.new(0, 10)
+                    SliderValueTextPadding.Parent = ValueText
 
                     local isDragging = false
 
@@ -939,6 +969,8 @@ function MetroLibrary:Window(Options)
 
                                 Value.FocusLost:Once(
                                     function()
+                                        ValueText.Visible = true
+                                        Value.Visible = false
                                         Value.Active = false
                                         Value.TextEditable = false
 
@@ -1006,6 +1038,7 @@ function MetroLibrary:Window(Options)
                 function SubSectionFunctions:Toggle(Options)
                     local Options = Options or {}
                     Options.Name = Options.Name or "Toggle"
+                    Options.Color = Options.Color or Color3.fromRGB(85, 85, 255)
                     Options.Default = Options.Default or false
                     Options.Callback = Options.Callback or function()
                         end
@@ -1023,9 +1056,9 @@ function MetroLibrary:Window(Options)
                     local ToggleStroke = Instance.new("UIStroke")
                     ToggleStroke.Name = "ToggleStroke"
                     ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    ToggleStroke.Transparency = 0.85
+                    ToggleStroke.Transparency = 0
                     ToggleStroke.Thickness = 1.25
-                    ToggleStroke.Color = Color3.fromRGB(255, 255, 255)
+                    ToggleStroke.Color = Toggle.BackgroundColor3
                     ToggleStroke.Parent = Toggle
 
                     local Title = Instance.new("TextLabel")
@@ -1114,7 +1147,7 @@ function MetroLibrary:Window(Options)
                                     0.3,
                                     Enum.EasingStyle.Sine,
                                     Enum.EasingDirection.Out,
-                                    {BackgroundColor3 = Color3.fromRGB(85, 85, 255)}
+                                    {BackgroundColor3 = Options.Color}
                                 },
                                 {
                                     Circle,
@@ -1199,9 +1232,9 @@ function MetroLibrary:Window(Options)
                     local InputfieldStroke = Instance.new("UIStroke")
                     InputfieldStroke.Name = "InputfieldStroke"
                     InputfieldStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    InputfieldStroke.Transparency = 0.85
+                    InputfieldStroke.Transparency = 0
                     InputfieldStroke.Thickness = 1.25
-                    InputfieldStroke.Color = Color3.fromRGB(255, 255, 255)
+                    InputfieldStroke.Color = Inputfield.BackgroundColor3
                     InputfieldStroke.Parent = Inputfield
 
                     local Title = Instance.new("TextLabel")
@@ -1305,6 +1338,7 @@ function MetroLibrary:Window(Options)
                     function HorizontalFunctions:Button(Options)
                         local Options = Options or {}
                         Options.Name = Options.Name or "Button"
+                        Options.Color = Options.Color or Color3.fromRGB(50, 50, 50)
                         Options.Callback = Options.Callback or function()
                             end
 
@@ -1318,7 +1352,7 @@ function MetroLibrary:Window(Options)
                         Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
                         Button.BackgroundTransparency = 0.5
                         Button.BorderSizePixel = 0
-                        Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                        Button.BackgroundColor3 = Options.Color
                         Button.AutoButtonColor = false
                         Button.FontSize = Enum.FontSize.Size14
                         Button.Text = Options.Name
@@ -1335,9 +1369,9 @@ function MetroLibrary:Window(Options)
                         local ButtonStroke = Instance.new("UIStroke")
                         ButtonStroke.Name = "ButtonStroke"
                         ButtonStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                        ButtonStroke.Transparency = 0.85
+                        ButtonStroke.Transparency = 0
                         ButtonStroke.Thickness = 1.25
-                        ButtonStroke.Color = Color3.fromRGB(255, 255, 255)
+                        ButtonStroke.Color = Button.BackgroundColor3
                         ButtonStroke.Parent = Button
 
                         local ButtonPadding = Instance.new("UIPadding")
@@ -1380,6 +1414,7 @@ function MetroLibrary:Window(Options)
                 function SubSectionFunctions:Dropdown(Options)
                     local Options = Options or {}
                     Options.Name = Options.Name or "Dropdown"
+                    Options.Color = Options.Color or Color3.fromRGB(85, 85, 255)
                     Options.Items = Options.Items or {"Pizza", "Chicken", "Lion", "King"}
                     Options.Default = Options.Default or 1
                     Options.CloseAfter = Options.CloseAfter or false
@@ -1404,9 +1439,9 @@ function MetroLibrary:Window(Options)
                     local DropdownStroke = Instance.new("UIStroke")
                     DropdownStroke.Name = "DropdownStroke"
                     DropdownStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                    DropdownStroke.Transparency = 0.85
+                    DropdownStroke.Transparency = 0
                     DropdownStroke.Thickness = 1.25
-                    DropdownStroke.Color = Color3.fromRGB(255, 255, 255)
+                    DropdownStroke.Color = Dropdown.BackgroundColor3
                     DropdownStroke.Parent = Dropdown
 
                     local Header = Instance.new("Frame")
@@ -1561,7 +1596,7 @@ function MetroLibrary:Window(Options)
                     ListContainerStroke.Name = "ListContainerStroke"
                     ListContainerStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                     ListContainerStroke.Thickness = 1.25
-                    ListContainerStroke.Color = Color3.fromRGB(85, 85, 255)
+                    ListContainerStroke.Color = Options.Color
                     ListContainerStroke.Parent = ListContainer
 
                     Searcher:GetPropertyChangedSignal("Text"):Connect(
@@ -1635,7 +1670,7 @@ function MetroLibrary:Window(Options)
                         ItemButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
                         ItemButton.BackgroundTransparency = 1
                         ItemButton.BorderSizePixel = 0
-                        ItemButton.BackgroundColor3 = Color3.fromRGB(85, 85, 255)
+                        ItemButton.BackgroundColor3 = Options.Color
                         ItemButton.FontSize = Enum.FontSize.Size14
                         ItemButton.Text = Item
                         ItemButton.TextSize = 13
@@ -1724,6 +1759,10 @@ function MetroLibrary:Window(Options)
                             end
                         end)
                     end
+
+                    local DropdownFunctions = {}
+
+                    return DropdownFunctions
                 end
 
                 local function getPlayers()
@@ -1764,10 +1803,23 @@ function MetroLibrary:Window(Options)
                     Playerfield.Name = "Playerfield"
                     Playerfield.Size = Options.Size
                     Playerfield.BorderColor3 = Color3.fromRGB(0, 0, 0)
-                    Playerfield.BackgroundTransparency = 1
+                    Playerfield.BackgroundTransparency = 0.5
                     Playerfield.BorderSizePixel = 0
-                    Playerfield.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                    Playerfield.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                     Playerfield.Parent = Contents
+
+                    local PlayerfieldStroke = Instance.new("UIStroke")
+                    PlayerfieldStroke.Name = "PlayerfieldStroke"
+                    PlayerfieldStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                    PlayerfieldStroke.Transparency = 0
+                    PlayerfieldStroke.Thickness = 1.25
+                    PlayerfieldStroke.Color = Playerfield.BackgroundColor3
+                    PlayerfieldStroke.Parent = Playerfield
+
+                    local PlayerfieldCorner = Instance.new("UICorner")
+                    PlayerfieldCorner.Name = "PlayerfieldCorner"
+                    PlayerfieldCorner.CornerRadius = UDim.new(0, 3)
+                    PlayerfieldCorner.Parent = Playerfield
 
                     local PlayerfieldImage = Instance.new("ImageLabel")
                     PlayerfieldImage.Name = "PlayerfieldImage"
@@ -1779,11 +1831,11 @@ function MetroLibrary:Window(Options)
                     PlayerfieldImage.Image = getHeadshot(Options.DefaultPlayer) or "rbxassetid://7072724538"
                     PlayerfieldImage.Parent = Playerfield
 
-                    local PlayerfieldCorner = Instance.new("UICorner")
-                    PlayerfieldCorner.Name = "PlayerfieldCorner"
-                    PlayerfieldCorner.CornerRadius = UDim.new(1, 0)
-                    PlayerfieldCorner.Parent = PlayerfieldImage
-
+                    local PlayerfieldImageCorner = Instance.new("UICorner")
+                    PlayerfieldImageCorner.Name = "PlayerfieldImageCorner"
+                    PlayerfieldImageCorner.CornerRadius = UDim.new(1, 0)
+                    PlayerfieldImageCorner.Parent = PlayerfieldImage
+                    
                     local PlayerfieldImageAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
                     PlayerfieldImageAspectRatioConstraint.Name = "PlayerfieldImageAspectRatioConstraint"
                     PlayerfieldImageAspectRatioConstraint.Parent = PlayerfieldImage
