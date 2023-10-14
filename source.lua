@@ -1171,7 +1171,7 @@ function MetroLibrary:Window(Options)
                                             0.3,
                                             Enum.EasingStyle.Sine,
                                             Enum.EasingDirection.Out,
-                                            {BackgroundColor3 = Color3.fromRGB(85, 85, 255)}
+                                            {BackgroundColor3 = Options.Color}
                                         },
                                         {
                                             Circle,
@@ -1769,7 +1769,7 @@ function MetroLibrary:Window(Options)
                     local Players = {}
 
                     for _, Player in pairs(game.Players:GetPlayers()) do
-                        if (#game.Players:GetPlayers() > 1 and Player ~= game.Players.LocalPlayer or Player) then
+                        if Player ~= game.Players.LocalPlayer then
                             table.insert(Players, Player)
                         end
                     end
@@ -1821,6 +1821,12 @@ function MetroLibrary:Window(Options)
                     PlayerfieldCorner.CornerRadius = UDim.new(0, 3)
                     PlayerfieldCorner.Parent = Playerfield
 
+                    local PlayerfieldPadding = Instance.new("UIPadding")
+                    PlayerfieldPadding.Name = "PlayerfieldPadding"
+                    PlayerfieldPadding.PaddingTop = UDim.new(0, 10)
+                    PlayerfieldPadding.PaddingBottom = UDim.new(0, 10)
+                    PlayerfieldPadding.Parent = Playerfield
+
                     local PlayerfieldImage = Instance.new("ImageLabel")
                     PlayerfieldImage.Name = "PlayerfieldImage"
                     PlayerfieldImage.Size = UDim2.new(1, 0, 1, 0)
@@ -1843,10 +1849,10 @@ function MetroLibrary:Window(Options)
                     local Display = Instance.new("TextLabel")
                     Display.Name = "Display"
                     Display.AnchorPoint = Vector2.new(0, 1)
-                    Display.Size = UDim2.new(1, -55, 0.5, 0)
+                    Display.Size = UDim2.new(1, -(PlayerfieldImage.AbsoluteSize.X + 5), 0.5, 0)
                     Display.BorderColor3 = Color3.fromRGB(0, 0, 0)
                     Display.BackgroundTransparency = 1
-                    Display.Position = UDim2.new(0, 55, 1, 0)
+                    Display.Position = UDim2.new(0, (PlayerfieldImage.AbsoluteSize.X + 5), 1, 0)
                     Display.BorderSizePixel = 0
                     Display.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                     Display.FontSize = Enum.FontSize.Size14
@@ -1865,11 +1871,11 @@ function MetroLibrary:Window(Options)
 
                     local Userbox = Instance.new("TextBox")
                     Userbox.Name = "Userbox"
-                    Userbox.Size = UDim2.new(1, -55, 0.5, 0)
+                    Userbox.Size = UDim2.new(1, -(PlayerfieldImage.AbsoluteSize.X + 5), 0.5, 0)
                     Userbox.Selectable = false
                     Userbox.BorderColor3 = Color3.fromRGB(0, 0, 0)
                     Userbox.BackgroundTransparency = 1
-                    Userbox.Position = UDim2.new(0, 55, 0, 0)
+                    Userbox.Position = UDim2.new(0, (PlayerfieldImage.AbsoluteSize.X + 5), 0, 0)
                     Userbox.Active = false
                     Userbox.BorderSizePixel = 0
                     Userbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
